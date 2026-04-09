@@ -64,6 +64,8 @@
       jails.sshd = lib.mkForce ''
         enabled = true
         filter = sshd
+        maxretry = 3
+        bantime = 3600
         ignoreip = 127.0.0.1/8,192.168.178.1/24
       '';
     };

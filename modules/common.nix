@@ -90,6 +90,9 @@
     enable = true;
     settings = {
       PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false; # add
+      X11Forwarding = false; # add
+      PermitRootLogin = "no"; # add (currently only in server.nix)
     };
   };
 
