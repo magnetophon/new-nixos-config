@@ -17,6 +17,14 @@
     ];
   };
 
+  # ── Hardware ────────────────────────────────────────────────────────
+  hardware = {
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+    };
+  };
+
   # ── Services ───────────────────────────────────────────────────────
   services = {
     # Audio: PipeWire

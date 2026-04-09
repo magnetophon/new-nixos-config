@@ -6,13 +6,10 @@
 }:
 
 {
-  # ── Hardware ────────────────────────────────────────────────────────
-  hardware = {
-    bluetooth = {
-      enable = true;
-      powerOnBoot = true;
-    };
-  };
+  imports = [
+    ./music.nix
+    ./extras.nix
+  ];
 
   # ── Boot extras for laptop ─────────────────────────────────────────
   boot = {
@@ -57,6 +54,8 @@
 
   # ── Laptop services ────────────────────────────────────────────────
   services = {
+    ntp.enable = false;
+    chrony.enable = true;
     acpid.enable = true;
     upower.enable = true;
     ringboard.x11.enable = true;
@@ -91,6 +90,12 @@
     '';
 
     dnsmasq.enable = false;
+  };
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    config.common.default = "*";
   };
 
   # ── Hibernate delay ────────────────────────────────────────────────

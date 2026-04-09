@@ -19,6 +19,25 @@
 
   system.stateVersion = "23.05";
 
+  environment.systemPackages = with pkgs; [
+    fw-ectool
+    intel-gpu-tools
+  ];
+
+  security.sudo.extraConfig = ''
+    bart  ALL=(root) NOPASSWD: /root/.local/bin/key_brightness.sh
+    bart  ALL=(root) NOPASSWD: /root/.local/bin/get_fan_rpm.sh
+    bart  ALL=(root) NOPASSWD: /root/.local/bin/toggle_fan_max.sh
+  '';
+
+  programs.ssh.knownHosts.pronix = {
+    hostNames = [
+      "pronix"
+      "81.206.32.45"
+    ];
+    publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAO+MVZiekHvS8Tb599XUWSA1e/vydvPc3f4ZfG6HedF";
+  };
+
   # ── Boot / ZFS ─────────────────────────────────────────────────────
   boot = {
     loader = {

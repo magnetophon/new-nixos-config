@@ -141,7 +141,7 @@ in
     string-machine
     swh_lv2
     synthv1
-    surge
+    # surge
     surge-xt
     vaporizer2
     tamgamp.lv2

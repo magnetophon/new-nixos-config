@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 {
   imports = [ ../nixframe/common.nix ];
@@ -9,6 +14,11 @@
   musnix.rtirq.nameList = "rtc0 usb";
 
   services.jack.jackd.extraOptions = [
-    "-P71" "-p2048" "-dalsa" "-dhw:USB" "-r48000" "-p4096" "-n3"
+    "-P71"
+    "-p2048"
+    "-dalsa"
+    "-dhw:USB"
+    "-r48000"
+    "-n3"
   ];
 }

@@ -29,8 +29,6 @@
           ./modules/common.nix
           ./modules/laptop.nix
           ./modules/non-rt.nix
-          ./modules/music.nix
-          ./modules/extras.nix
           nixos-hardware.nixosModules.framework-12th-gen-intel
           musnix.nixosModules.musnix
         ];
@@ -44,8 +42,6 @@
           ./modules/common.nix
           ./modules/laptop.nix
           ./modules/rt.nix
-          ./modules/music.nix
-          ./modules/extras.nix
           nixos-hardware.nixosModules.framework-12th-gen-intel
           musnix.nixosModules.musnix
         ];

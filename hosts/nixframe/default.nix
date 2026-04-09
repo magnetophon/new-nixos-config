@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 {
   imports = [ ./common.nix ];
@@ -37,36 +42,16 @@
     };
   };
   services.thermald.enable = true;
-  services.ntp.enable = false;
-  services.chrony.enable = true;
 
   services.fwupd.extraRemotes = [ "lvfs-testing" ];
   services.fwupd.uefiCapsuleSettings.DisableCapsuleUpdateOnDisk = true;
 
-  services.smartd.devices = [{ device = "/dev/nvme0n1"; }];
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    config.common.default = "*";
-  };
+  services.smartd.devices = [ { device = "/dev/nvme0n1"; } ];
 
   services.udev.extraRules = ''
     ACTION=="add|change", SUBSYSTEM=="leds", KERNEL=="chromeos:multicolor:power", RUN+="${pkgs.coreutils}/bin/chmod 0666 /sys/class/leds/%k/multi_intensity"
   '';
 
-  environment.systemPackages = with pkgs; [ fw-ectool intel-gpu-tools ];
-
-  security.sudo.extraConfig = ''
-    bart  ALL=(root) NOPASSWD: /root/.local/bin/key_brightness.sh
-    bart  ALL=(root) NOPASSWD: /root/.local/bin/get_fan_rpm.sh
-    bart  ALL=(root) NOPASSWD: /root/.local/bin/toggle_fan_max.sh
-  '';
-
   boot.binfmt.emulatedSystems = [ "armv7l-linux" ];
 
-  programs.ssh.knownHosts.pronix = {
-    hostNames = [ "pronix" "81.206.32.45" ];
-    publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAO+MVZiekHvS8Tb599XUWSA1e/vydvPc3f4ZfG6HedF";
-  };
 }

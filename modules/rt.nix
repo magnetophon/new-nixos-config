@@ -37,10 +37,9 @@
     rtirq.enable = true;
     das_watchdog.enable = true;
     rtcqs.enable = true;
-    rtirq.highList = "snd_hrtimer";
+    # rtirq.highList = "snd_hrtimer";
     rtirq.resetAll = 1;
     rtirq.prioLow = 0;
-    alsaSeq.enable = false;
   };
 
   services.jack = {
@@ -59,7 +58,22 @@
     jalv
     lilv
   ];
+
+  # ── no turbo: keep quiet ───────────────────────────────────────────
+  systemd.services.disable-turbo = {
+    description = "Disable CPU turbo boost";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "systemd-modules-load.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.bash}/bin/bash -c 'echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo'";
+      ExecStop = "${pkgs.bash}/bin/bash -c 'echo 0 > /sys/devices/system/cpu/intel_pstate/no_turbo'";
+    };
+  };
+
   boot.kernelParams = [
+    # to get graphics drivers on old kernel: 6.12
     "xe.force_probe=46a6"
     # your existing params...
   ];
