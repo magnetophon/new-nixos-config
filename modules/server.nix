@@ -1,0 +1,143 @@
+{ pkgs, lib, config, ... }:
+
+{
+  # ── Boot ────────────────────────────────────────────────────────────
+  boot = {
+    tmp.useTmpfs = true;
+    kernelParams = [ "elevator=none" ];
+  };
+
+  # ── Networking ─────────────────────────────────────────────────────
+  networking.useDHCP = false;
+
+  # ── Users ──────────────────────────────────────────────────────────
+  users = {
+    defaultUserShell = pkgs.bash;
+    groups.nixBuild = { };
+    users.nixBuild = {
+      name = "nixBuild";
+      isSystemUser = true;
+      useDefaultShell = true;
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID1kJ2pCgAaixNICnm2WB6ILvE7+BTvNTaWPYBOvaXsv nixBuild"
+      ];
+      group = "nixBuild";
+    };
+  };
+
+  nix.settings = {
+    allowed-users = [ "nixBuild" "@wheel" ];
+    trusted-users = [ "nixBuild" ];
+    download-buffer-size = 1073741824; # 1GB
+  };
+
+  # ── SSH hardening ──────────────────────────────────────────────────
+  services.openssh = {
+    ports = [ 511 ];
+    settings.PermitRootLogin = "no";
+    extraConfig = ''
+      Match User nixBuild
+        AllowAgentForwarding no
+        AllowTcpForwarding no
+        PermitTTY no
+        PermitTunnel no
+        X11Forwarding no
+      Match All
+        ClientAliveInterval 300
+        ClientAliveCountMax 3
+        TCPKeepAlive yes
+    '';
+  };
+
+  # ── Services ────────────────────────────────────────────────────────
+  services = {
+    fail2ban = {
+      enable = true;
+      jails.sshd = lib.mkForce ''
+        enabled = true
+        filter = sshd
+        ignoreip = 127.0.0.1/8,192.168.178.1/24
+      '';
+    };
+
+    smartd.enable = true;
+
+    zfs = {
+      autoSnapshot.enable = true;
+      autoScrub = {
+        enable = true;
+        interval = "weekly";
+      };
+      trim.enable = true;
+    };
+  };
+
+  # ── Wake on LAN ────────────────────────────────────────────────────
+  networking.interfaces.eno1.wakeOnLan.enable = true;
+
+  systemd.services.wol-eth0 = {
+    description = "Wake-on-LAN for eno1";
+    requires = [ "network.target" ];
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.ethtool}/bin/ethtool -s eno1 wol g";
+    };
+  };
+
+  # ── Mail (ZED notifications) ───────────────────────────────────────
+  programs = {
+    mosh.enable = true;
+    msmtp = {
+      enable = true;
+      setSendmail = true;
+      defaults = {
+        aliases = "/etc/aliases";
+        port = 465;
+        tls_trust_file = "/etc/ssl/certs/ca-certificates.crt";
+        tls = "on";
+        auth = "login";
+        tls_starttls = "off";
+      };
+      accounts.default = {
+        host = "sub5.mail.dreamhost.com";
+        passwordeval = "pass mail";
+        user = "bart@magnetophon.nl";
+        from = "bart@magnetophon.nl";
+      };
+    };
+    gnupg.agent.enableSSHSupport = true;
+
+    # fish-from-bash trick
+    bash = {
+      enable = true;
+      interactiveShellInit = ''
+        if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
+        then
+          shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
+          exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
+        fi
+      '';
+    };
+  };
+
+  # ── Server packages (beyond common) ───────────────────────────────
+  environment.systemPackages = with pkgs; [
+    smartmontools
+    mkpasswd
+    pinentry-curses
+    thumbs         # tmux-thumbs
+    clang
+    faust
+    rmlint
+    lm_sensors
+    xclip
+    haskellPackages.markdown
+  ];
+
+  # ── Sudo ───────────────────────────────────────────────────────────
+  security.sudo.extraConfig = ''
+    bart  ALL=(ALL) NOPASSWD: ${pkgs.systemd}/bin/systemctl
+  '';
+}
