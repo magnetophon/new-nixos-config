@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  self,
   ...
 }:
 
@@ -76,6 +77,7 @@
         nix-your-shell fish | source
       '';
     };
+    zsh.enable = true;
     zoxide.enable = true;
     neovim = {
       enable = true;
@@ -278,5 +280,20 @@
     NIXPKGS = "/home/bart/source/nixpkgs/";
     NIXPKGS_ALL = "/home/bart/source/nixpkgs/pkgs/top-level/all-packages.nix";
     EDITOR = "hx";
+  };
+
+  # ── Link full config into current profile ──────────────────────────
+  system.systemBuilderCommands = ''
+    ln -s ${self} $out/full-config
+  '';
+
+  # ── Telemetry opt-outs ─────────────────────────────────────────────
+  environment.variables = {
+    GATSBY_TELEMETRY_DISABLED = "1";
+    HOMEBREW_NO_ANALYTICS = "1";
+    STNOUPGRADE = "1";
+    DOTNET_CLI_TELEMETRY_OPTOUT = "1";
+    SAM_CLI_TELEMETRY = "0";
+    AZURE_CORE_COLLECT_TELEMETRY = "0";
   };
 }

@@ -8,18 +8,29 @@
     deploy-rs.url = "github:serokell/deploy-rs";
   };
 
-  outputs = inputs@{ self, nixpkgs, nixos-hardware, musnix, deploy-rs, ... }:
+  outputs =
+    inputs@{
+      self,
+        nixpkgs,
+        nixos-hardware,
+        musnix,
+        deploy-rs,
+        ...
+    }:
     let
       system = "x86_64-linux";
     in
     {
       nixosConfigurations.nixframe = nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = { inherit self; };
         modules = [
           ./hosts/nixframe/default.nix
           ./modules/common.nix
           ./modules/laptop.nix
           ./modules/non-rt.nix
+          ./modules/music.nix
+          ./modules/extras.nix
           nixos-hardware.nixosModules.framework-12th-gen-intel
           musnix.nixosModules.musnix
         ];
@@ -27,11 +38,14 @@
 
       nixosConfigurations.nixframe-rt = nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = { inherit self; };
         modules = [
           ./hosts/nixframe-rt/default.nix
           ./modules/common.nix
           ./modules/laptop.nix
           ./modules/rt.nix
+          ./modules/music.nix
+          ./modules/extras.nix
           nixos-hardware.nixosModules.framework-12th-gen-intel
           musnix.nixosModules.musnix
         ];
@@ -39,6 +53,7 @@
 
       nixosConfigurations.pronix = nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = { inherit self; };
         modules = [
           ./hosts/pronix/default.nix
           ./modules/common.nix
@@ -51,7 +66,10 @@
         sshUser = "bart";
         user = "root";
         interactiveSudo = true;
-        sshOpts = [ "-p" "511" ];
+        sshOpts = [
+          "-p"
+          "511"
+        ];
         remoteBuild = true;
         profiles.system = {
           user = "root";
