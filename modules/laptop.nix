@@ -1,13 +1,13 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 {
   # ── Hardware ────────────────────────────────────────────────────────
   hardware = {
-    enableAllFirmware = true;
-    cpu = {
-      amd.updateMicrocode = true;
-      intel.updateMicrocode = true;
-    };
     bluetooth = {
       enable = true;
       powerOnBoot = true;
@@ -16,9 +16,7 @@
 
   # ── Boot extras for laptop ─────────────────────────────────────────
   boot = {
-    blacklistedKernelModules = [ "uvcvideo" ];  # no webcam
-    kernel.sysctl."net.ipv4.ip_forward" = 1;    # for VM networking
-    kernelModules = [ "kvm-intel" "kvm-amd" "tun" "virtio" ];
+    blacklistedKernelModules = [ "uvcvideo" ]; # no webcam
   };
 
   # ── X11 / i3 ───────────────────────────────────────────────────────
@@ -28,13 +26,13 @@
 
     displayManager.lightdm.enable = true;
 
-    config = ''
-      Section "InputClass"
-        Identifier     "Enable libinput for TrackPoint"
-        MatchIsPointer "on"
-        Driver         "libinput"
-      EndSection
-    '';
+    # config = ''
+    # Section "InputClass"
+    # Identifier     "Enable libinput for TrackPoint"
+    # MatchIsPointer "on"
+    # Driver         "libinput"
+    # EndSection
+    # '';
 
     desktopManager.xterm.enable = false;
     desktopManager.wallpaper.mode = "fill";
@@ -59,8 +57,6 @@
 
   # ── Laptop services ────────────────────────────────────────────────
   services = {
-    fstrim.enable = true;
-    fwupd.enable = true;
     acpid.enable = true;
     upower.enable = true;
     ringboard.x11.enable = true;
@@ -116,8 +112,14 @@
 
   systemd.services.brightness-restore = {
     description = "Restore brightness after resume";
-    wantedBy = [ "suspend.target" "hibernate.target" ];
-    after = [ "suspend.target" "hibernate.target" ];
+    wantedBy = [
+      "suspend.target"
+      "hibernate.target"
+    ];
+    after = [
+      "suspend.target"
+      "hibernate.target"
+    ];
     serviceConfig = {
       Type = "oneshot";
       ExecStart = "${pkgs.brightnessctl}/bin/brightnessctl --restore";
@@ -165,8 +167,13 @@
 
   # ── Extra user groups for laptop ───────────────────────────────────
   users.users.bart.extraGroups = [
-    "audio" "jackaudio" "video" "usbmux"
-    "networkmanager" "adbusers" "camera"
+    "audio"
+    "jackaudio"
+    "video"
+    "usbmux"
+    "networkmanager"
+    "adbusers"
+    "camera"
   ];
 
   # ── GUI packages ───────────────────────────────────────────────────
@@ -296,7 +303,6 @@
     alsa-utils
 
     # programming extras
-    evil-helix
     deno
     bacon
     just
@@ -336,6 +342,7 @@
   fonts = {
     fontDir.enable = true;
     fontconfig = {
+      # accept bitmap (non-scalable) fonts.
       localConf = ''
         <?xml version="1.0"?>
         <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
@@ -377,12 +384,12 @@
       enable = true;
       defaultSearchProviderSearchURL = "https://duckduckgo.com/?q={searchTerms}";
       extensions = [
-        "pkehgijcmpdhfbdbbnkijodmdjhbjlgp"  # privacy badger
-        "gcbommkclmclpchllfjekcdonpmejbdp"  # https everywhere
-        "cjpalhdlnbpafiamejdnhcphjbkeiagm"  # ublock origin
-        "ldpochfccmkkmhdbclfhpagapcfdljkj"  # Decentraleyes
-        "poahndpaaanbpbeafbkploiobpiiieko"  # Display anchors
-        "klbibkeccnjlkjkiokjodocebajanakg"  # the great suspender
+        "pkehgijcmpdhfbdbbnkijodmdjhbjlgp" # privacy badger
+        "gcbommkclmclpchllfjekcdonpmejbdp" # https everywhere
+        "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
+        "ldpochfccmkkmhdbclfhpagapcfdljkj" # Decentraleyes
+        "poahndpaaanbpbeafbkploiobpiiieko" # Display anchors
+        "klbibkeccnjlkjkiokjodocebajanakg" # the great suspender
       ];
       extraOpts = {
         DefaultSearchProviderEnabled = true;
@@ -411,5 +418,7 @@
   security.sudo.extraConfig = ''
     bart  ALL=(ALL) NOPASSWD: ${pkgs.iotop}/bin/iotop
     bart  ALL=(ALL) NOPASSWD: ${pkgs.tlp}/bin/tlp
+    bart  ALL=(ALL) NOPASSWD: ${pkgs.systemd}/bin/systemctl
   '';
+
 }

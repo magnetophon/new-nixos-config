@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 {
   # ── Nix settings ────────────────────────────────────────────────────
@@ -6,7 +11,10 @@
     settings = {
       sandbox = true;
       auto-optimise-store = true;
-      experimental-features = [ "nix-command" "flakes" ];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
     };
     package = pkgs.nixVersions.stable;
   };
@@ -17,7 +25,10 @@
   boot = {
     loader.timeout = 1;
     tmp.cleanOnBoot = true;
-    blacklistedKernelModules = [ "snd_pcsp" "pcspkr" ];
+    blacklistedKernelModules = [
+      "snd_pcsp"
+      "pcspkr"
+    ];
     supportedFilesystems = [ "zfs" ];
   };
 
@@ -68,10 +79,8 @@
     zoxide.enable = true;
     neovim = {
       enable = true;
-      defaultEditor = true;
     };
     gnupg.agent.enable = true;
-    direnv.enable = true;
   };
 
   # ── Services ────────────────────────────────────────────────────────
@@ -92,12 +101,13 @@
 
       # editors
       emacs
-      gnutls                  # for doom emacs irc
-      nodejs                  # for doom lsp mode
+      gnutls # for doom emacs irc
+      nodejs # for doom lsp mode
       editorconfig-core-c
       pinentry-emacs
-      zstd                    # for undo-tree compression
+      zstd # for undo-tree compression
       vim
+      evil-helix
 
       # git
       gitFull
@@ -191,7 +201,11 @@
       ethtool
     ];
 
-    shells = with pkgs; [ bashInteractive fish ];
+    shells = with pkgs; [
+      bashInteractive
+      fish
+      zsh
+    ];
 
     variables = {
       DO_NOT_TRACK = "1";
@@ -204,10 +218,22 @@
     useXkbConfig = true;
     earlySetup = true;
     colors = [
-      "eee8d5" "dc322f" "859900" "b58900"
-      "268bd2" "d33682" "2aa198" "073642"
-      "002b36" "cb4b16" "586e75" "839496"
-      "657b83" "6c71c4" "586e75" "002b36"
+      "eee8d5"
+      "dc322f"
+      "859900"
+      "b58900"
+      "268bd2"
+      "d33682"
+      "2aa198"
+      "073642"
+      "002b36"
+      "cb4b16"
+      "586e75"
+      "839496"
+      "657b83"
+      "6c71c4"
+      "586e75"
+      "002b36"
     ];
   };
 
@@ -215,9 +241,42 @@
   security.rtkit.enable = true;
 
   security.pam.loginLimits = [
-    { domain = "@audio"; item = "memlock"; type = "-"; value = "unlimited"; }
-    { domain = "@audio"; item = "rtprio";  type = "-"; value = "99"; }
-    { domain = "@audio"; item = "nofile";  type = "soft"; value = "99999"; }
-    { domain = "@audio"; item = "nofile";  type = "hard"; value = "99999"; }
+    {
+      domain = "@audio";
+      item = "memlock";
+      type = "-";
+      value = "unlimited";
+    }
+    {
+      domain = "@audio";
+      item = "rtprio";
+      type = "-";
+      value = "99";
+    }
+    {
+      domain = "@audio";
+      item = "nofile";
+      type = "soft";
+      value = "99999";
+    }
+    {
+      domain = "@audio";
+      item = "nofile";
+      type = "hard";
+      value = "99999";
+    }
   ];
+  hardware = {
+    enableAllFirmware = true;
+    cpu = {
+      amd.updateMicrocode = true;
+      intel.updateMicrocode = true;
+    };
+  };
+
+  environment.sessionVariables = {
+    NIXPKGS = "/home/bart/source/nixpkgs/";
+    NIXPKGS_ALL = "/home/bart/source/nixpkgs/pkgs/top-level/all-packages.nix";
+    EDITOR = "hx";
+  };
 }

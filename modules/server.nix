@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 {
   # ── Boot ────────────────────────────────────────────────────────────
@@ -26,7 +31,10 @@
   };
 
   nix.settings = {
-    allowed-users = [ "nixBuild" "@wheel" ];
+    allowed-users = [
+      "nixBuild"
+      "@wheel"
+    ];
     trusted-users = [ "nixBuild" ];
     download-buffer-size = 1073741824; # 1GB
   };
@@ -127,7 +135,7 @@
     smartmontools
     mkpasswd
     pinentry-curses
-    thumbs         # tmux-thumbs
+    thumbs # tmux-thumbs
     clang
     faust
     rmlint
@@ -136,8 +144,4 @@
     haskellPackages.markdown
   ];
 
-  # ── Sudo ───────────────────────────────────────────────────────────
-  security.sudo.extraConfig = ''
-    bart  ALL=(ALL) NOPASSWD: ${pkgs.systemd}/bin/systemctl
-  '';
 }
