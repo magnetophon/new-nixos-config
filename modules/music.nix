@@ -186,6 +186,7 @@ in
 
     # ── Hosts / DAWs ──────────────────────────────────────────────
     ardour
+    ardour_8
     xjadeo
     helio-workstation
     carla
