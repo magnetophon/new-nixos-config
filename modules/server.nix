@@ -56,6 +56,19 @@
     '';
   };
 
+  # ── Firewall ────────────────────────────────────────────────────────
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 511 ]; # your SSH port
+    allowedUDPPortRanges = [
+      {
+        from = 60000;
+        to = 61000;
+      }
+    ]; # for mosh
+    # add others as needed
+  };
+
   # ── Services ────────────────────────────────────────────────────────
   services = {
     fail2ban = {
