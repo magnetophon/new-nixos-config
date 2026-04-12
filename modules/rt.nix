@@ -31,8 +31,8 @@
   musnix = {
     enable = true;
     kernel.realtime = true;
-    # kernel.packages = pkgs.linuxPackages;
-    kernel.packages = pkgs.linuxPackages_6_12;
+    kernel.packages = pkgs.linuxPackages;
+    # kernel.packages = pkgs.linuxPackages_6_12;
     # kernel.packages = pkgs.linuxPackages_latest;
     rtirq.enable = true;
     das_watchdog.enable = true;
@@ -58,6 +58,14 @@
     jalv
     lilv
   ];
+  # ── Disable DPMS and screensaver blanking ──────────────────────────
+  # Disable DPMS and screensaver blanking
+  services.xserver.serverFlagsSection = ''
+    Option "BlankTime" "0"
+    Option "StandbyTime" "0"
+    Option "SuspendTime" "0"
+    Option "OffTime" "0"
+  '';
 
   # ── no turbo: keep quiet ───────────────────────────────────────────
   systemd.services.disable-turbo = {
@@ -74,7 +82,11 @@
 
   boot.kernelParams = [
     # to get graphics drivers on old kernel: 6.12
-    "xe.force_probe=46a6"
+    # "xe.force_probe=46a6"
     # your existing params...
+    # xe.force_probe='46a6'
+    # i915.force_probe='!46a6
+    "i915.force_probe=!46a6"
+    "xe.force_probe=46a6"
   ];
 }
