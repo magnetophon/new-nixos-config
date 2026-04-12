@@ -16,6 +16,9 @@
     zfs.autoSnapshot.enable = lib.mkForce false;
     zfs.trim.enable = lib.mkForce false;
     smartd.enable = lib.mkForce false;
+    chrony.enable = lib.mkForce false; # NTP sync can spike CPU
+    printing.enable = lib.mkForce false;
+    fwupd.enable = lib.mkForce false;
   };
 
   # ── Disable virtualisation ─────────────────────────────────────────
@@ -81,12 +84,9 @@
   };
 
   boot.kernelParams = [
-    # to get graphics drivers on old kernel: 6.12
-    # "xe.force_probe=46a6"
-    # your existing params...
-    # xe.force_probe='46a6'
-    # i915.force_probe='!46a6
     "i915.force_probe=!46a6"
     "xe.force_probe=46a6"
   ];
+  boot.kernel.sysctl."kernel.sysrq" = 1;
+
 }
