@@ -19,8 +19,6 @@
   # ── X11 / i3 ───────────────────────────────────────────────────────
   services.xserver = {
     enable = true;
-    enableCtrlAltBackspace = true;
-
     displayManager.lightdm.enable = true;
 
     # config = ''
@@ -33,8 +31,12 @@
 
     desktopManager.xterm.enable = false;
     desktopManager.wallpaper.mode = "fill";
-    xkb.options = "caps:swapescape";
-    xkb.variant = "altgr-intl";
+    enableCtrlAltBackspace = true;
+    xkb = {
+      options = "caps:swapescape,terminate:ctrl_alt_bksp";
+      layout = "us";
+      variant = "altgr-intl";
+    };
   };
 
   services.libinput = {
