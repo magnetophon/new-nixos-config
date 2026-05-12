@@ -65,7 +65,7 @@
       "zfs.zfs_arc_max=12884901888"
       "mem_sleep_default=deep"
     ];
-    zfs.allowHibernation = true;
+    zfs.unsafeAllowHibernation = true;
     zfs.forceImportRoot = false;
     zfs.forceImportAll = false;
     initrd.availableKernelModules = [
