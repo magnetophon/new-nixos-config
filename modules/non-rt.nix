@@ -35,6 +35,25 @@
       jack.enable = true;
       pulse.enable = true;
       socketActivation = true;
+      # Klark Teknik DW 20BR advertises both A2DP Source and Sink roles, causing
+      # bluez to auto-connect both in parallel and one gets EBUSY. Pin to sink only.
+      wireplumber.extraConfig."99-bluez" = {
+        "monitor.bluez.properties" = {
+          "bluez5.enable-sbc-xq" = true;
+          "bluez5.enable-msbc" = true;
+          "bluez5.enable-hw-volume" = true;
+        };
+        "monitor.bluez.rules" = [
+          {
+            matches = [ { "device.name" = "bluez_card.20_64_DE_FF_EB_70"; } ];
+            actions = {
+              update-props = {
+                "bluez5.auto-connect" = [ "a2dp_sink" ];
+              };
+            };
+          }
+        ];
+      };
     };
 
     espanso.enable = true;
