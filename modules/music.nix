@@ -46,9 +46,11 @@ in
     artyFX
     x42-avldrums
     bchoppr
+    bvibratr
     bespokesynth
     bjumblr
     bristol
+    bangr
     bsequencer
     bshapr
     bslizr
@@ -117,6 +119,7 @@ in
     ninjas2
     noise-repellent
     nova-filters
+    # ob-xf
     odin2
     oxefmsynth
     padthv1
@@ -131,6 +134,7 @@ in
     setbfree
     sfizz
     sg-323
+    sirial
     sorcer
     spectmorph
     speech-denoiser
