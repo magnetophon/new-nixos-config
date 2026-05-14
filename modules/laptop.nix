@@ -190,6 +190,7 @@
     i3status-rust
     i3-layout-manager
     i3-resurrect
+    i3altlayout
     autotiling-rs
     wmfocus
     dmenu
@@ -211,6 +212,7 @@
     (pkgs.w3m.override { graphicsSupport = true; })
 
     # desktop utilities
+    clipster
     picom
     dunst
     libnotify
@@ -228,8 +230,11 @@
     flameshot
     feh
     pqiv
+    emulsion
+    tiv
     physlock
     networkmanager_dmenu
+    connman_dmenu
     impala
     sysz
     systemctl-tui

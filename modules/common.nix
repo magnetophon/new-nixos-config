@@ -161,6 +161,7 @@
       htop
       bottom
       btop
+      gotop
 
       # utilities
       wget

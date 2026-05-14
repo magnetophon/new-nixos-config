@@ -51,6 +51,7 @@ in
     bjumblr
     bristol
     bangr
+    boops
     bsequencer
     bshapr
     bslizr
@@ -65,6 +66,7 @@ in
     chow-centaur
     csa
     cmt
+    delayarchitect
     dexed
     diopser
     distrho-ports
@@ -91,6 +93,10 @@ in
     fomp
     freqtweak
     fverb
+    filtr
+    gate12
+    time12
+    reevr
     geonkick
     ripplerx
     melmatcheq-lv2
@@ -124,8 +130,6 @@ in
     oxefmsynth
     padthv1
     quadrafuzz
-    plugin-torture
-    pluginval
     proteus
     qsampler
     qsynth
@@ -133,6 +137,7 @@ in
     samplv1
     setbfree
     sfizz
+    sfizz-ui
     sg-323
     sirial
     sorcer
@@ -155,6 +160,7 @@ in
     vocproc
     wolf-shaper
     x42-plugins
+    xtuner
     yoshimi
     zam-plugins
     zlcompressor
@@ -163,6 +169,7 @@ in
     zynaddsubfx
 
     # ── Faust ──────────────────────────────────────────────────────
+    magnetophonDSP.CompBus
     magnetophonDSP.MBdistortion
     magnetophonDSP.CharacterCompressor
     magnetophonDSP.ConstantDetuneChorus
@@ -174,6 +181,7 @@ in
     magnetophonDSP.shelfMultiBand
     tambura
     faust
+    faust2
     faust2alqt
     faust2alsa
     faust2firefox
@@ -185,6 +193,7 @@ in
     faustlive
     faustfmt
     faustlsp
+    faust-physicalmodeling
     kapitonov-plugins-pack
     mooSpace
 
@@ -206,6 +215,7 @@ in
     # ── Utilities ──────────────────────────────────────────────────
     a2jmidid
     cuetools
+    gwc
     jack2
     jack-link
     lilv
@@ -237,12 +247,17 @@ in
     sooperlooper
     vimpc
     x32edit
+    # m32edit
 
     # ── Development ───────────────────────────────────────────────
     octave
     graphviz
     leiningen
     ladspa-sdk
+    plugin-torture
+    pluginval
+    lv2lint
+    lv2bm
   ];
 
 }
