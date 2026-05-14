@@ -95,6 +95,7 @@
       PermitRootLogin = "no"; # add (currently only in server.nix)
     };
   };
+  services.smartd.enable = true;
 
   # ── Packages (CLI tools common to all hosts) ───────────────────────
   environment = {

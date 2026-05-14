@@ -11,7 +11,7 @@
     kernel.sysctl."net.ipv4.ip_forward" = 1; # for VM networking
     kernelModules = [
       "kvm-intel"
-      "kvm-amd"
+      # "kvm-amd"
       "tun"
       "virtio"
     ];
