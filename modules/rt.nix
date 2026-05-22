@@ -34,8 +34,8 @@
   musnix = {
     enable = true;
     kernel.realtime = true;
-    kernel.packages = pkgs.linuxPackages;
-    # kernel.packages = pkgs.linuxPackages_6_12;
+    # kernel.packages = pkgs.linuxPackages;
+    kernel.packages = pkgs.linuxPackages_6_12;
     # kernel.packages = pkgs.linuxPackages_latest;
     rtirq.enable = true;
     das_watchdog.enable = true;
