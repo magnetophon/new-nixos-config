@@ -63,7 +63,6 @@
       createHome = false;
       home = "/home/bart";
       extraGroups = [ "wheel" ];
-      shell = pkgs.fish;
       isNormalUser = true;
     };
     mutableUsers = true;
