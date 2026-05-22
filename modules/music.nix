@@ -89,6 +89,7 @@ in
     open-music-kontrollers.synthpod
     open-music-kontrollers.vm
 
+    openmeters
     fluidsynth
     fomp
     freqtweak
