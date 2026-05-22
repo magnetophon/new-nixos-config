@@ -20,9 +20,9 @@ in
 {
 
   # ── Overrides ──────────────────────────────────────────────────────
-  nixpkgs.config.packageOverrides = pkgs: {
-    guitarix = pkgs.guitarix.override { enableOptimization = true; };
-  };
+  # nixpkgs.config.packageOverrides = pkgs: {
+  # guitarix = pkgs.guitarix.override { enableOptimization = true; };
+  # };
 
   # ── Audio plugin paths ─────────────────────────────────────────────
   # environment.variables = {
