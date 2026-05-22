@@ -14,7 +14,6 @@
   # ── Nix extras ─────────────────────────────────────────────────────
   nix.settings = {
     extra-sandbox-paths = [ "/home/nixchroot" ];
-    require-sigs = true;
     keep-outputs = true;
     keep-derivations = true;
     stalled-download-timeout = 600;
