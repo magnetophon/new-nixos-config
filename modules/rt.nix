@@ -78,8 +78,10 @@
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      ExecStart = "${pkgs.bash}/bin/bash -c 'echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo'";
-      ExecStop = "${pkgs.bash}/bin/bash -c 'echo 0 > /sys/devices/system/cpu/intel_pstate/no_turbo'";
+      # ExecStart = "${pkgs.bash}/bin/bash -c 'echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo'";
+      # ExecStop = "${pkgs.bash}/bin/bash -c 'echo 0 > /sys/devices/system/cpu/intel_pstate/no_turbo'";
+      ExecStart = pkgs.writeShellScript "disable-turbo" "echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo";
+      ExecStop = pkgs.writeShellScript "enable-turbo" "echo 0 > /sys/devices/system/cpu/intel_pstate/no_turbo";
     };
   };
 
