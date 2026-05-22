@@ -15,13 +15,10 @@
   nix.settings = {
     extra-sandbox-paths = [ "/home/nixchroot" ];
     require-sigs = true;
+    keep-outputs = true;
+    keep-derivations = true;
+    stalled-download-timeout = 600;
   };
-  nix.extraOptions = lib.optionalString (config.nix.package == pkgs.nixVersions.stable) ''
-    gc-keep-outputs         = true
-    gc-keep-derivations     = true
-    env-keep-derivations    = false
-    stalled-download-timeout = 600
-  '';
 
   # ── Walker dependency ──────────────────────────────────────────────
   # services.elephant.enable = true;
