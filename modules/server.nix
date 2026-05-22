@@ -21,7 +21,7 @@
     users.nixBuild = {
       name = "nixBuild";
       isSystemUser = true;
-      useDefaultShell = true;
+      shell = pkgs.bash;
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID1kJ2pCgAaixNICnm2WB6ILvE7+BTvNTaWPYBOvaXsv nixBuild"
       ];
