@@ -67,6 +67,7 @@
       home = "/home/bart";
       extraGroups = [ "wheel" ];
       isNormalUser = true;
+      uid = 1001; # for audio-off.service
     };
     mutableUsers = true;
   };
