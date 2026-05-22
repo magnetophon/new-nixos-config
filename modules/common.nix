@@ -34,7 +34,7 @@
       "snd_pcsp"
       "pcspkr"
     ];
-    supportedFilesystems = [ "zfs" ];
+    supportedFilesystems.zfs = true;
   };
 
   # ── Locale / timezone ──────────────────────────────────────────────
