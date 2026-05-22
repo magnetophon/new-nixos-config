@@ -33,6 +33,10 @@
     };
     tmp.useTmpfs = true;
     kernelParams = [ "elevator=none" ];
+    zfs = {
+      extraPools = [ "bu_pool" ];
+      forceImportRoot = false;
+    };
   };
 
   fileSystems = {
@@ -45,8 +49,6 @@
       fsType = "zfs";
     };
   };
-  boot.zfs.extraPools = [ "bu_pool" ];
-  boot.zfs.forceImportRoot = false;
 
   swapDevices = [ { device = "/dev/disk/by-id/wwn-0x5000c5005f5cb3b3-part1"; } ];
 

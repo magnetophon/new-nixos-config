@@ -74,8 +74,6 @@
       };
 
       checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
-      # formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-rfc-style;
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
-
     };
 }
