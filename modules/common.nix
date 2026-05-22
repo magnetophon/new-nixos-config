@@ -187,8 +187,6 @@
       # development
       rustup
       rust-analyzer
-      cargo
-      rustc
       lldb
       shfmt
       haskellPackages.ShellCheck
