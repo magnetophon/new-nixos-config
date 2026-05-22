@@ -11,11 +11,15 @@
   nix = {
     settings = {
       sandbox = true;
-      auto-optimise-store = true;
+      # auto-optimise-store = true;
       experimental-features = [
         "nix-command"
         "flakes"
       ];
+    };
+    optimise = {
+      automatic = true;
+      dates = [ "05:45" ];
     };
     package = pkgs.nixVersions.stable;
   };
