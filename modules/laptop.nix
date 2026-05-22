@@ -397,11 +397,9 @@
       defaultSearchProviderSearchURL = "https://duckduckgo.com/?q={searchTerms}";
       extensions = [
         "pkehgijcmpdhfbdbbnkijodmdjhbjlgp" # privacy badger
-        "gcbommkclmclpchllfjekcdonpmejbdp" # https everywhere
         "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
         "ldpochfccmkkmhdbclfhpagapcfdljkj" # Decentraleyes
         "poahndpaaanbpbeafbkploiobpiiieko" # Display anchors
-        "klbibkeccnjlkjkiokjodocebajanakg" # the great suspender
       ];
       extraOpts = {
         DefaultSearchProviderEnabled = true;
