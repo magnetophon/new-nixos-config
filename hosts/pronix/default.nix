@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 {
   imports = [ ./hardware-configuration.nix ];
@@ -21,9 +26,9 @@
       enable = true;
       copyKernels = true;
       devices = [
-        "/dev/disk/by-id/wwn-0x5000c500684c2f73"  # DISK15
-        "/dev/disk/by-id/wwn-0x5000c500681b26fb"  # DISK17
-        "/dev/disk/by-id/wwn-0x5000c500763332ff"  # DISK18
+        "/dev/disk/by-id/wwn-0x5000c500684c2f73" # DISK15
+        "/dev/disk/by-id/wwn-0x5000c500681b26fb" # DISK17
+        "/dev/disk/by-id/wwn-0x5000c500763332ff" # DISK18
       ];
     };
     tmp.useTmpfs = true;
@@ -31,13 +36,19 @@
   };
 
   fileSystems = {
-    "/" = { device = "sys_pool_2/root/nixos"; fsType = "zfs"; };
-    "/home" = { device = "sys_pool_2/home"; fsType = "zfs"; };
+    "/" = {
+      device = "sys_pool_2/root/nixos";
+      fsType = "zfs";
+    };
+    "/home" = {
+      device = "sys_pool_2/home";
+      fsType = "zfs";
+    };
   };
   boot.zfs.extraPools = [ "bu_pool" ];
   boot.zfs.forceImportRoot = false;
 
-  swapDevices = [{ device = "/dev/disk/by-id/wwn-0x5000c5005f5cb3b3-part1"; }];
+  swapDevices = [ { device = "/dev/disk/by-id/wwn-0x5000c5005f5cb3b3-part1"; } ];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
 }
