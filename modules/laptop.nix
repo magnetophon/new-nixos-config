@@ -335,6 +335,8 @@
 
   # ── Session variables ──────────────────────────────────────────────
   environment.sessionVariables = {
+    NIXPKGS = "/home/bart/source/nixpkgs/";
+    NIXPKGS_ALL = "/home/bart/source/nixpkgs/pkgs/top-level/all-packages.nix";
     BROWSER = "qutebrowser";
     PAGER = "less";
     LESS = "-isMR";
