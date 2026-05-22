@@ -426,11 +426,4 @@
 
   xdg.sounds.enable = false;
 
-  # ── Sudo extras ────────────────────────────────────────────────────
-  security.sudo.extraConfig = ''
-    bart  ALL=(ALL) NOPASSWD: ${pkgs.iotop}/bin/iotop
-    bart  ALL=(ALL) NOPASSWD: ${pkgs.tlp}/bin/tlp
-    bart  ALL=(ALL) NOPASSWD: ${pkgs.systemd}/bin/systemctl
-  '';
-
 }
