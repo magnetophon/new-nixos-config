@@ -220,18 +220,6 @@
     # ── backup extras ─────────────────────────────────────────────
     storeBackup
     hostsblock
-
-    # ── busybox (usleep only, for brightness scripts) ─────────────
-    (busybox.overrideAttrs (old: {
-      postFixup = ''
-        mkdir -p /tmp/bb-trim
-        cp $out/bin/usleep /tmp/bb-trim
-        cp $out/bin/busybox /tmp/bb-trim
-        rm $out/bin/*
-        cp /tmp/bb-trim/usleep $out/bin/
-        cp /tmp/bb-trim/busybox $out/bin/
-      '';
-    }))
   ];
 
   # ── ZSH NixOS management functions ─────────────────────────────────
