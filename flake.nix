@@ -2,7 +2,8 @@
   description = "NixOS configurations for nixframe, nixframe-rt and pronix";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     musnix.url = "github:musnix/musnix";
     deploy-rs.url = "github:serokell/deploy-rs";
