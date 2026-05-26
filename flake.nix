@@ -7,6 +7,11 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     musnix.url = "github:musnix/musnix";
     deploy-rs.url = "github:serokell/deploy-rs";
+
+    nixpkgs-glide = {
+      url = "github:RobertCraigie/nixpkgs/feat/glide-browser";
+    };
+
   };
 
   outputs =
@@ -24,7 +29,11 @@
     {
       nixosConfigurations.nixframe = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit self; };
+        # specialArgs = { inherit self; };
+        specialArgs = inputs // {
+          inherit self;
+        };
+
         modules = [
           ./hosts/nixframe/default.nix
           ./modules/common.nix
@@ -37,7 +46,10 @@
 
       nixosConfigurations.nixframe-rt = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit self; };
+        # specialArgs = { inherit self; };
+        specialArgs = inputs // {
+          inherit self;
+        };
         modules = [
           ./hosts/nixframe-rt/default.nix
           ./modules/common.nix

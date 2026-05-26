@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  nixpkgs-glide,
   ...
 }:
 
@@ -210,6 +211,7 @@
     ungoogled-chromium
     tor-browser
     (pkgs.w3m.override { graphicsSupport = true; })
+    nixpkgs-glide.legacyPackages.${pkgs.system}.glide-browser
 
     # desktop utilities
     clipster
