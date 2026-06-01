@@ -31,14 +31,8 @@
   nixpkgs.config.allowUnfreePredicate =
     pkg:
     builtins.elem (lib.getName pkg) [
-      # firmware / microcode (hardware.enableAllFirmware, cpu.intel.updateMicrocode)
+      # microcode (cpu.intel.updateMicrocode)
       "intel-microcode"
-      # Below pulled in by enableAllFirmware but not used on Framework hardware:
-      "broadcom-bt-firmware"
-      "b43-firmware"
-      "xone-dongle-firmware"
-      "facetimehd-calibration"
-      "facetimehd-firmware"
 
       # graphics driver stack (hardware.graphics)
       "intel-ocl"
@@ -376,7 +370,10 @@
     }
   ];
   hardware = {
-    enableAllFirmware = true;
+    # enableRedistributableFirmware (default true) covers linux-firmware,
+    # which has Intel WiFi/GPU blobs and ethernet NIC firmware. Add anything
+    # else explicitly per host.
+    enableAllFirmware = false;
     cpu = {
       amd.updateMicrocode = true;
       intel.updateMicrocode = true;
