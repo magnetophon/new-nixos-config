@@ -284,6 +284,17 @@
 
   environment.sessionVariables = {
     EDITOR = "hx";
+    NIXPKGS = "/home/bart/source/nixpkgs/";
+    NIXPKGS_ALL = "/home/bart/source/nixpkgs/pkgs/top-level/all-packages.nix";
+    PAGER = "less";
+    LESS = "-isMR";
+    NIX_PAGER = "bat";
+    XDG_DATA_HOME = "$HOME/.local/share";
+    TERMINFO_DIRS = "/run/current-system/sw/share/terminfo";
+    RANGER_LOAD_DEFAULT_RC = "FALSE";
+    FZF_DEFAULT_COMMAND = "fd --type f --hidden --follow --exclude .git";
+    FZF_ALT_C_COMMAND = "bfs -color -type d";
+    FZF_ALT_C_OPTS = "--preview 'tree -L 4 -d -C --noreport -C {} | head -200'";
   };
 
   # ── Link full config into current profile ──────────────────────────
