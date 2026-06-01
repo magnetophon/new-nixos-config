@@ -8,9 +8,9 @@
     musnix.url = "github:musnix/musnix";
     deploy-rs.url = "github:serokell/deploy-rs";
 
-    nixpkgs-glide = {
-      url = "github:RobertCraigie/nixpkgs/feat/glide-browser";
-    };
+    nixpkgs-glide.url = "github:RobertCraigie/nixpkgs/feat/glide-browser";
+
+    claude-sandbox.url = "github:mrquentin/claude-sandbox";
 
   };
 
@@ -39,6 +39,7 @@
           ./modules/common.nix
           ./modules/laptop.nix
           ./modules/non-rt.nix
+          ./modules/claude-sandbox.nix
           nixos-hardware.nixosModules.framework-12th-gen-intel
           musnix.nixosModules.musnix
         ];
@@ -55,6 +56,7 @@
           ./modules/common.nix
           ./modules/laptop.nix
           ./modules/rt.nix
+          ./modules/claude-sandbox.nix
           nixos-hardware.nixosModules.framework-12th-gen-intel
           musnix.nixosModules.musnix
         ];
