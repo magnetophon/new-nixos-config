@@ -41,7 +41,6 @@
   # ── SSH hardening ──────────────────────────────────────────────────
   services.openssh = {
     ports = [ 511 ];
-    settings.PermitRootLogin = "no";
     extraConfig = ''
       Match User nixBuild
         AllowAgentForwarding no
@@ -81,8 +80,6 @@
         ignoreip = 127.0.0.1/8,192.168.178.1/24
       '';
     };
-
-    smartd.enable = true;
 
     zfs = {
       autoSnapshot.enable = true;

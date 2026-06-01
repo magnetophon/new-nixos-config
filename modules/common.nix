@@ -15,6 +15,9 @@
         "nix-command"
         "flakes"
       ];
+      keep-outputs = true;
+      keep-derivations = true;
+      stalled-download-timeout = 600;
     };
     optimise = {
       automatic = true;
@@ -82,6 +85,8 @@
     };
     zsh.enable = true;
     zoxide.enable = true;
+    direnv.enable = true;
+    ssh.askPassword = "";
     neovim = {
       enable = true;
     };
@@ -104,6 +109,10 @@
     };
   };
   services.smartd.enable = true;
+
+  # ── Time sync (rt.nix force-disables chrony: NTP can spike CPU) ─────
+  services.chrony.enable = true;
+  services.acpid.enable = true;
 
   # ── Packages (CLI tools common to all hosts) ───────────────────────
   environment = {

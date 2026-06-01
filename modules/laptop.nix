@@ -57,9 +57,6 @@
 
   # ── Laptop services ────────────────────────────────────────────────
   services = {
-    ntp.enable = false;
-    chrony.enable = true;
-    acpid.enable = true;
     upower.enable = true;
     ringboard.x11.enable = true;
 
@@ -91,8 +88,6 @@
     udev.extraRules = ''
       ENV{ID_FS_USAGE}=="filesystem|other|crypto", ENV{UDISKS_FILESYSTEM_SHARED}="1"
     '';
-
-    dnsmasq.enable = false;
   };
 
   xdg.portal = {
@@ -341,7 +336,6 @@
   # ── Chromium policy ────────────────────────────────────────────────
   programs = {
     seahorse.enable = true;
-    ssh.askPassword = "";
     chromium = {
       enable = true;
       defaultSearchProviderSearchURL = "https://duckduckgo.com/?q={searchTerms}";

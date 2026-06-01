@@ -111,7 +111,6 @@
 
   programs = {
     virt-manager.enable = true;
-    direnv.enable = true;
   };
   security.polkit.enable = true;
 

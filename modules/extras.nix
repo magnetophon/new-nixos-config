@@ -14,9 +14,6 @@
   # ── Nix extras ─────────────────────────────────────────────────────
   nix.settings = {
     extra-sandbox-paths = [ "/home/nixchroot" ];
-    keep-outputs = true;
-    keep-derivations = true;
-    stalled-download-timeout = 600;
   };
 
   # ── Walker dependency ──────────────────────────────────────────────
