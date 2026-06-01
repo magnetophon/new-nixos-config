@@ -26,7 +26,41 @@
     package = pkgs.nixVersions.stable;
   };
 
-  nixpkgs.config.allowUnfree = true;
+  # Default: disallow unfree. Allowlist the specific packages actually used.
+  # Names are matched against `lib.getName pkg` (pname or derivation name).
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
+    builtins.elem (lib.getName pkg) [
+      # firmware / microcode (hardware.enableAllFirmware, cpu.intel.updateMicrocode)
+      "intel-microcode"
+      # Below pulled in by enableAllFirmware but not used on Framework hardware:
+      "broadcom-bt-firmware"
+      "b43-firmware"
+      "xone-dongle-firmware"
+      "facetimehd-calibration"
+      "facetimehd-firmware"
+
+      # graphics driver stack (hardware.graphics)
+      "intel-ocl"
+
+      # claude-sandbox (modules/claude-sandbox.nix)
+      "claude-code"
+
+      # steam-run (extras.nix)
+      "steam-unwrapped"
+
+      # dictionaries (extras.nix)
+      "aspell-dict-en-science"
+
+      # fonts (laptop.nix)
+      "corefonts"
+
+      # DAWs / audio (music.nix)
+      "bitwig-studio6"
+      "reaper"
+      "x32-edit"
+      "vst2-sdk" # pulled in by some plugin builds
+    ];
 
   # ── Boot ────────────────────────────────────────────────────────────
   boot = {
