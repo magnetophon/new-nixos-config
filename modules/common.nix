@@ -156,6 +156,7 @@
       nix-index
       nix-prefetch-git
       nix-prefetch-scripts
+      nix-check-deps
       nixos-option
       comma
       manix
