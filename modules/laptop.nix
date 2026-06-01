@@ -210,7 +210,6 @@
     qutebrowser
     ungoogled-chromium
     tor-browser
-    (pkgs.w3m.override { graphicsSupport = true; })
     nixpkgs-glide.legacyPackages.${pkgs.system}.glide-browser
 
     # desktop utilities
@@ -233,13 +232,10 @@
     feh
     pqiv
     emulsion
-    tiv
     physlock
     networkmanager_dmenu
     connman_dmenu
     impala
-    sysz
-    systemctl-tui
 
     # file manager GUI
     thunar
@@ -251,15 +247,12 @@
       archiveSupport = true;
       vapoursynthSupport = true;
     })
-    yt-dlp
-    ffmpeg-full
 
     # communication
     thunderbird
     signal-desktop
     telegram-desktop
     hexchat
-    weechat
 
     # office / documents
     libreoffice
@@ -274,31 +267,21 @@
 
     # calculators
     qalculate-gtk
-    libqalculate
-    bc
 
     # password / auth
-    gopass
     authenticator
     gnome-keyring
     libsecret
 
     # system tools
     gparted
-    parted
     baobab
     udiskie
-    lm_sensors
-    acpi
     acpid
-    powertop
-    s-tui
 
     # syncing / backup
     nextcloud-client
     syncthing
-    borgbackup
-    restic
 
     # misc
     meld
@@ -308,31 +291,7 @@
     recoll
     bluetui
     mepo
-    silver-searcher
-    (ripgrep.override { withPCRE2 = true; })
-    ripgrep-all
-    trash-cli
-    httm
-    inotify-tools
     alsa-utils
-
-    # programming extras
-    deno
-    bacon
-    just
-    cookiecutter
-    kondo
-
-    # nix extras
-    nox
-    treefmt
-    nixpkgs-fmt
-    nix-serve
-    gh
-    nixpkgs-lint
-    devenv
-    nix-direnv
-    nix-init
   ];
 
   # ── Session variables ──────────────────────────────────────────────
@@ -405,12 +364,7 @@
         SearchSuggestEnabled = false;
       };
     };
-    television = {
-      enable = true;
-      enableZshIntegration = true;
-    };
     dconf.enable = true;
-    command-not-found.enable = true;
   };
 
   xdg.sounds.enable = false;

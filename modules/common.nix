@@ -86,6 +86,11 @@
       enable = true;
     };
     gnupg.agent.enable = true;
+    television = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+    command-not-found.enable = true;
   };
 
   # ── Services ────────────────────────────────────────────────────────
@@ -130,7 +135,7 @@
       lf
 
       # file management / search
-      ripgrep
+      (ripgrep.override { withPCRE2 = true; })
       fd
       fzf
       skim
@@ -208,6 +213,58 @@
       ollama
       fclones
       ethtool
+
+      # search / files (from laptop)
+      ripgrep-all
+      silver-searcher
+      trash-cli
+      inotify-tools
+      httm
+      w3m
+      tiv
+
+      # sysadmin (from laptop)
+      parted
+      lm_sensors
+      acpi
+      powertop
+      s-tui
+      sysz
+      systemctl-tui
+
+      # backup (from laptop)
+      borgbackup
+      restic
+
+      # dev (from laptop)
+      deno
+      bacon
+      just
+      cookiecutter
+      kondo
+      gh
+
+      # nix dev (from laptop)
+      nox
+      treefmt
+      nixpkgs-fmt
+      nixpkgs-lint
+      devenv
+      nix-direnv
+      nix-init
+      nix-serve
+
+      # media CLI (from laptop)
+      yt-dlp
+      ffmpeg-full
+
+      # calculators (from laptop)
+      bc
+      libqalculate
+
+      # misc CLI (from laptop)
+      gopass
+      weechat
     ];
 
     shells = with pkgs; [

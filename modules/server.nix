@@ -141,7 +141,6 @@
     clang
     faust
     rmlint
-    lm_sensors
     xclip
     haskellPackages.markdown
   ];
