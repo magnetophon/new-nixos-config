@@ -129,7 +129,7 @@
       editorconfig-core-c
       pinentry-emacs
       zstd # for undo-tree compression
-      vim
+      (lib.lowPrio vim) # extras.nix ships a customized vim-full; let it win the shared paths
       evil-helix
 
       # git
@@ -201,7 +201,7 @@
 
       # development
       rustup
-      rust-analyzer
+      (lib.hiPrio rust-analyzer) # win over rustup's rust-analyzer proxy shim
       lldb
       shfmt
       haskellPackages.ShellCheck

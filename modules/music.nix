@@ -137,7 +137,7 @@ in
     rkrlv2
     samplv1
     setbfree
-    sfizz
+    (lib.lowPrio sfizz) # sfizz-ui ships the same lib/CLI; let the UI build win
     sfizz-ui
     sg-323
     sirial
@@ -200,7 +200,7 @@ in
 
     # ── Hosts / DAWs ──────────────────────────────────────────────
     ardour
-    ardour_8
+    (lib.lowPrio ardour_8) # keep both majors; let ardour 9 win the shared "ardour"-named files
     xjadeo
     helio-workstation
     carla

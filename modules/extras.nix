@@ -38,7 +38,7 @@
     linuxPackages.cpupower
     hdparm
     testdisk
-    mesa-demos
+    (lib.lowPrio mesa-demos) # its bin/engine collides with ollama; let ollama win
     libva-utils
     unetbootin
 
@@ -88,7 +88,7 @@
     chafa
     resvg
     _7zz
-    ffmpeg
+    # ffmpeg dropped: ffmpeg-full (common.nix) already provides ffmpeg/ffprobe/ffplay
     imagemagick
 
     # ── terminals / shells ────────────────────────────────────────
@@ -133,7 +133,7 @@
     dysk
 
     # ── crypto / security ─────────────────────────────────────────
-    libressl
+    (lib.hiPrio libressl) # a netcat (libressl.nc) split output elsewhere ships duplicate man pages; let this copy win
     cryptsetup
     ntfs3g
     paperkey
