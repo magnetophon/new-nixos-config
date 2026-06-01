@@ -91,17 +91,41 @@
   # ── Users ───────────────────────────────────────────────────────────
   users = {
     defaultUserShell = pkgs.fish;
+    groups.bot = { };
+    groups.proc = { }; # /proc hidepid bypass — see boot.specialFileSystems
     users.bart = {
       name = "bart";
       group = "users";
       createHome = false;
       home = "/home/bart";
-      extraGroups = [ "wheel" ];
+      extraGroups = [
+        "wheel"
+        "bot"
+        "proc"
+      ];
       isNormalUser = true;
       uid = 1001; # for audio-off.service
     };
+    # Sandbox account for running claude-code. No sudo, no SSH keys.
+    # Shared group `bot` (bart is a member) lets bart drop files into
+    # /home/bot and read whatever bot writes back.
+    users.bot = {
+      name = "bot";
+      group = "bot";
+      createHome = false;
+      home = "/home/bot";
+      isNormalUser = true;
+      uid = 1002;
+      packages = [ pkgs.claude-code ];
+    };
     mutableUsers = true;
   };
+
+  # Own /home/bot as bot:bot with setgid so files created there by
+  # bart inherit group `bot` and remain accessible to both.
+  systemd.tmpfiles.rules = [
+    "d /home/bot 2775 bot bot - -"
+  ];
 
   # ── Programs ────────────────────────────────────────────────────────
   programs = {
@@ -135,7 +159,26 @@
       X11Forwarding = false; # add
       PermitRootLogin = "no"; # add (currently only in server.nix)
     };
+    # Defensive: even if bot ever gets a key, deny forwarding / tunnels.
+    extraConfig = ''
+      Match User bot
+        AllowAgentForwarding no
+        AllowTcpForwarding no
+        PermitTunnel no
+        X11Forwarding no
+      Match All
+    '';
   };
+
+  # Hide other users' processes from non-privileged accounts. Members of
+  # group `proc` keep full /proc visibility; bart is a member above.
+  boot.specialFileSystems."/proc".options = [
+    "nosuid"
+    "nodev"
+    "noexec"
+    "hidepid=2"
+    "gid=proc"
+  ];
   services.smartd.enable = true;
 
   # ── Time sync (rt.nix force-disables chrony: NTP can spike CPU) ─────
@@ -368,7 +411,32 @@
       type = "hard";
       value = "99999";
     }
+    # Sandbox caps for bot: bound fork-bombs and fd exhaustion.
+    {
+      domain = "bot";
+      item = "nproc";
+      type = "hard";
+      value = "512";
+    }
+    {
+      domain = "bot";
+      item = "nofile";
+      type = "hard";
+      value = "8192";
+    }
   ];
+
+  # Resource ceiling for everything bot runs after login. Applies to the
+  # systemd user slice (uid 1002), so it covers shells, claude-code, and any
+  # subprocesses they spawn.
+  systemd.slices."user-1002" = {
+    description = "User slice for bot (uid 1002)";
+    sliceConfig = {
+      MemoryMax = "8G";
+      CPUQuota = "200%";
+      TasksMax = 512;
+    };
+  };
   hardware = {
     # enableRedistributableFirmware (default true) covers linux-firmware,
     # which has Intel WiFi/GPU blobs and ethernet NIC firmware. Add anything

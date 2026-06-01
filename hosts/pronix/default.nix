@@ -48,6 +48,10 @@
       device = "sys_pool_2/home";
       fsType = "zfs";
     };
+    "/home/bot" = {
+      device = "sys_pool_2/bot";
+      fsType = "zfs";
+    };
   };
 
   swapDevices = [ { device = "/dev/disk/by-id/wwn-0x5000c5005f5cb3b3-part1"; } ];
