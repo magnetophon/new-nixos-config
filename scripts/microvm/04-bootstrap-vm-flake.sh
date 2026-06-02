@@ -67,8 +67,10 @@ fi
 # bot inside the VM is uid/gid 1002.
 chown -R 1002:1002 "$mnt/new-nixos-config"
 
-# Idempotent: re-setting the same value is a no-op.
-git -C "$mnt/new-nixos-config" config receive.denyCurrentBranch updateInstead
+# Run as uid 1002 (the owner after chown) so git's safe.directory check
+# doesn't reject root touching a foreign-owned repo. Idempotent: re-setting
+# the same value is a no-op.
+sudo -u '#1002' git -C "$mnt/new-nixos-config" config receive.denyCurrentBranch updateInstead
 
 echo
 echo "==> done. Persistent flake clone at $mnt/new-nixos-config:"
