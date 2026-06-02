@@ -205,7 +205,7 @@
     qutebrowser
     ungoogled-chromium
     tor-browser
-    nixpkgs-glide.legacyPackages.${pkgs.stdenv.hostPlatform.system}.glide-browser
+    # nixpkgs-glide.legacyPackages.${pkgs.stdenv.hostPlatform.system}.glide-browser
 
     # desktop utilities
     clipster
