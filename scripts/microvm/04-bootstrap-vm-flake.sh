@@ -74,4 +74,5 @@ sudo -u '#1002' git -C "$mnt/new-nixos-config" config receive.denyCurrentBranch 
 
 echo
 echo "==> done. Persistent flake clone at $mnt/new-nixos-config:"
-( cd "$mnt/new-nixos-config" && git rev-parse --short HEAD && git status -s | head -20 )
+sudo -u '#1002' git -C "$mnt/new-nixos-config" rev-parse --short HEAD
+sudo -u '#1002' git -C "$mnt/new-nixos-config" status -s | head -20
