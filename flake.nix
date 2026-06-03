@@ -12,6 +12,11 @@
 
     claude-sandbox.url = "github:mrquentin/claude-sandbox";
 
+    microvm = {
+      url = "github:microvm-nix/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -64,7 +69,9 @@
 
       nixosConfigurations.pronix = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit self; };
+        specialArgs = inputs // {
+          inherit self;
+        };
         modules = [
           ./hosts/pronix/default.nix
           ./modules/common.nix
