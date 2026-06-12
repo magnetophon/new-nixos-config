@@ -296,7 +296,6 @@
 
       # search / files (from laptop)
       ripgrep-all
-      silver-searcher
       trash-cli
       inotify-tools
       httm
