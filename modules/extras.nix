@@ -56,7 +56,7 @@
     subversion
     hub
     diff-so-fancy
-    diffoscope
+    # diffoscope
     gitui
     gist
     bfg-repo-cleaner
@@ -186,7 +186,7 @@
     gtypist
     kdePackages.kcolorchooser
     filezilla
-    openscad
+    # openscad
 
     # ── calculators / converters ──────────────────────────────────
     calc
