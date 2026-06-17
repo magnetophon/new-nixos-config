@@ -66,8 +66,10 @@ in
     chow-centaur
     csa
     cmt
+    ctagdrc
     delayarchitect
     dexed
+    digidrie
     diopser
     distrho-ports
     dragonfly-reverb
@@ -121,12 +123,12 @@ in
     librearp-lv2
     mda_lv2
     molot-lite
-    ctagdrc
     mod-arpeggiator-lv2
+    nih-plug
     ninjas2
     noise-repellent
     nova-filters
-    # ob-xf
+    ob-xf
     odin2
     oxefmsynth
     padthv1
@@ -134,6 +136,7 @@ in
     proteus
     qsampler
     qsynth
+    resonarium
     rkrlv2
     samplv1
     setbfree
@@ -148,6 +151,8 @@ in
     stone-phaser
     master_me
     qdelay
+    sirial
+    six-sines
     string-machine
     swh_lv2
     synthv1
