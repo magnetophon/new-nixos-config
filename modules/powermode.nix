@@ -142,8 +142,12 @@ in
               speed = 0;
             }
             {
-              temp = 60;
+              temp = 59; # one degree under the minimum speed, otherwise it interpollates and the fan stalls
               speed = 0;
+            }
+            {
+              temp = 60;
+              speed = 10; # 10 seems to be the minimum, lower it stops
             }
             {
               temp = 70;

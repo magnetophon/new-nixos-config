@@ -285,7 +285,7 @@
     simplescreenrecorder
     recoll
     bluetui
-    mepo
+    mepo # maps
     alsa-utils
   ];
 
