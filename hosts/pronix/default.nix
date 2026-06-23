@@ -25,17 +25,26 @@
     loader.grub = {
       enable = true;
       copyKernels = true;
-      devices = [
-        "/dev/disk/by-id/wwn-0x5000c500684c2f73" # DISK15
-        "/dev/disk/by-id/wwn-0x5000c500681b26fb" # DISK17
-        "/dev/disk/by-id/wwn-0x5000c500763332ff" # DISK18
+      mirroredBoots = [
+        {
+          path = "/boot";
+          devices = [ "/dev/disk/by-id/wwn-0x5000c500681b26fb" ];
+        } # DISK17 (live /boot)
+        {
+          path = "/boot1";
+          devices = [ "/dev/disk/by-id/wwn-0x5000c500684c2f73" ];
+        } # DISK15
+        {
+          path = "/boot2";
+          devices = [ "/dev/disk/by-id/wwn-0x5000c500763332ff" ];
+        } # DISK18
       ];
     };
     tmp.useTmpfs = true;
     kernelParams = [ "elevator=none" ];
     zfs = {
       extraPools = [ "bu_pool" ];
-      forceImportRoot = false;
+      forceImportRoot = true;
     };
   };
 
@@ -43,6 +52,30 @@
     "/" = {
       device = "sys_pool_2/root/nixos";
       fsType = "zfs";
+    };
+    "/boot" = {
+      device = "/dev/disk/by-id/wwn-0x5000c500681b26fb-part2"; # sdf2 = the ESP
+      fsType = "vfat";
+      options = [
+        "nofail"
+        "umask=0077"
+      ];
+    };
+    "/boot1" = {
+      device = "/dev/disk/by-id/wwn-0x5000c500684c2f73-part2";
+      fsType = "vfat";
+      options = [
+        "nofail"
+        "umask=0077"
+      ];
+    };
+    "/boot2" = {
+      device = "/dev/disk/by-id/wwn-0x5000c500763332ff-part2";
+      fsType = "vfat";
+      options = [
+        "nofail"
+        "umask=0077"
+      ];
     };
     "/home" = {
       device = "sys_pool_2/home";
