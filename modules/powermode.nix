@@ -78,7 +78,10 @@ let
   # --- powermode CLI: record the mode + switch the fan curve ----------------------
   powermode = pkgs.writeShellApplication {
     name = "powermode";
-    runtimeInputs = [ pkgs.fw-fanctrl pkgs.coreutils ];
+    runtimeInputs = [
+      pkgs.fw-fanctrl
+      pkgs.coreutils
+    ];
     text = ''
       mode="''${1:-$(cat /var/lib/powermode/mode 2>/dev/null || echo balanced)}"
       case "$mode" in
@@ -92,7 +95,8 @@ let
     '';
   };
 
-in {
+in
+{
   # --- fan: fw-fanctrl, one curve per mode ----------------------------------------
   hardware.fw-fanctrl = {
     enable = true;
@@ -105,10 +109,22 @@ in {
           fanSpeedUpdateFrequency = 5;
           movingAverageInterval = 30;
           speedCurve = [
-            { temp = 0;  speed = 0; }
-            { temp = 70; speed = 20; }
-            { temp = 80; speed = 55; }
-            { temp = 90; speed = 100; }
+            {
+              temp = 0;
+              speed = 0;
+            }
+            {
+              temp = 70;
+              speed = 20;
+            }
+            {
+              temp = 80;
+              speed = 55;
+            }
+            {
+              temp = 90;
+              speed = 100;
+            }
           ];
         };
         # balanced: fan and CPU setpoints sit close; both contribute.
@@ -116,11 +132,26 @@ in {
           fanSpeedUpdateFrequency = 5;
           movingAverageInterval = 25;
           speedCurve = [
-            { temp = 0;  speed = 10; }
-            { temp = 55; speed = 30; }
-            { temp = 65; speed = 55; }
-            { temp = 75; speed = 85; }
-            { temp = 80; speed = 100; }
+            {
+              temp = 0;
+              speed = 10;
+            }
+            {
+              temp = 55;
+              speed = 30;
+            }
+            {
+              temp = 65;
+              speed = 55;
+            }
+            {
+              temp = 75;
+              speed = 85;
+            }
+            {
+              temp = 80;
+              speed = 100;
+            }
           ];
         };
         # performance: fan LEADS — ramps early and hard so the die never nears the
@@ -129,10 +160,22 @@ in {
           fanSpeedUpdateFrequency = 2;
           movingAverageInterval = 10;
           speedCurve = [
-            { temp = 0;  speed = 25; }
-            { temp = 45; speed = 50; }
-            { temp = 55; speed = 75; }
-            { temp = 65; speed = 100; }
+            {
+              temp = 0;
+              speed = 25;
+            }
+            {
+              temp = 45;
+              speed = 50;
+            }
+            {
+              temp = 55;
+              speed = 75;
+            }
+            {
+              temp = 65;
+              speed = 100;
+            }
           ];
         };
       };
@@ -161,7 +204,7 @@ in {
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${powermode}/bin/powermode";   # no arg -> applies stored mode
+      ExecStart = "${powermode}/bin/powermode"; # no arg -> applies stored mode
     };
   };
 
@@ -171,8 +214,15 @@ in {
   environment.systemPackages = [ powermode ];
 
   # flip modes without a password — handy for i3 keybindings
-  security.sudo.extraRules = [{
-    users = [ user ];
-    commands = [{ command = "${powermode}/bin/powermode"; options = [ "NOPASSWD" ]; }];
-  }];
+  security.sudo.extraRules = [
+    {
+      users = [ user ];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/powermode";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
 }

@@ -41,7 +41,8 @@
       DEVICES_TO_ENABLE_ON_LAN_DISCONNECT = "wifi";
     };
   };
-  services.thermald.enable = true;
+  # use modules/powermode.nix instead:
+  services.thermald.enable = false;
 
   services.fwupd.extraRemotes = [ "lvfs-testing" ];
   services.fwupd.uefiCapsuleSettings.DisableCapsuleUpdateOnDisk = true;
