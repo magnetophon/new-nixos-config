@@ -1,38 +1,26 @@
 # powermode.nix — three power modes for a 12th-gen Framework 13, where each mode
 # is defined by WHICH actuator yields first:
 #
-#   quiet        CPU target LOW  (62 C)  -> the CPU throttles to stay cool, so the
-#                                           die rarely reaches the fan's ramp; fan idles.
+#   quiet        CPU target LOW  (52 C)  -> the CPU throttles to stay cool; fan idles.
 #   balanced     setpoints close (78 C)  -> CPU and fan share the work.
-#   performance  CPU target HIGH (92 C)  -> the fan ramps early/hard to hold the die
-#                                           well below 92 C, leaving the CPU at full speed.
+#   performance  CPU target HIGH (92 C)  -> the fan ramps early/hard; CPU runs free.
 #
-# The fan side is fw-fanctrl (one curve per mode). The CPU side is a small
-# proportional regulator that nudges intel_pstate max_perf_pct toward the
-# current mode's target temperature. `powermode <mode>` records the mode and
-# switches the fan curve; the regulator picks up the new target within one tick.
+# Hardening for worst-case (hung software, hot enclosed backpack):
+#   * the CPU regulator heartbeats systemd's WatchdogSec, so a hung loop is
+#     killed and restarted (and ExecStopPost frees the CPU). TimeoutStopSec keeps
+#     the SIGKILL escalation fast if a wedged process ignores the stop signal.
+#   * an independent, temperature-keyed fan guard trips near TjMax regardless of
+#     why cooling failed (fw-fanctrl hang, wedged ectool, dead regulator).
+#   * underneath all of this, the silicon TjMax/THERMTRIP throttle-and-cutoff
+#     still protects the hardware with no software running at all.
 
 { pkgs, ... }:
 
 let
   user = "bart";
 
-  # --- CPU regulator: hold die temp at the current mode's target by capping freq ---
-  regulator = pkgs.writeShellScript "cpu-thermal-regulator" ''
-    export PATH=${pkgs.coreutils}/bin:$PATH
-
-    pct=/sys/devices/system/cpu/intel_pstate/max_perf_pct
-    modefile=/var/lib/powermode/mode
-
-    tick=2          # seconds between adjustments
-    band=2000       # +/-2 C deadband (millidegrees): do nothing inside it
-    k_up=2          # gain (pct per C) when cooler than target: ramp up gently
-    k_down=3        # gain when hotter than target: throttle harder (bias to cool/quiet)
-    step_max=40     # clamp change per tick: fast mode-switches, no violent swings
-    floor=20        # never cap the CPU below this %
-    ceil=100
-
-    read_temp() {   # echo package temperature in millidegrees C
+  readTemp = ''
+    read_temp() {            # echo package temperature in millidegrees C
       local h z
       for h in /sys/class/hwmon/hwmon*; do
         if [ "$(cat "$h/name" 2>/dev/null)" = coretemp ]; then
@@ -46,23 +34,36 @@ let
       done
       echo 0
     }
+  '';
+
+  # --- CPU regulator: hold die temp at the current mode's target by capping freq ---
+  regulator = pkgs.writeShellScript "cpu-thermal-regulator" ''
+    export PATH=${pkgs.coreutils}/bin:${pkgs.systemd}/bin:$PATH
+
+    pct=/sys/devices/system/cpu/intel_pstate/max_perf_pct
+    modefile=/var/lib/powermode/mode
+
+    tick=2; band=2000; k_up=2; k_down=3; step_max=40; floor=20; ceil=100
+
+    ${readTemp}
+
+    systemd-notify --ready          # tell systemd we're up (Type=notify)
 
     while true; do
       case "$(cat "$modefile" 2>/dev/null || echo balanced)" in
-        quiet)       target=62000 ;;
+        quiet)       target=52000 ;;
         performance) target=92000 ;;
-        *)           target=78000 ;;   # balanced / unknown
+        *)           target=78000 ;;
       esac
 
       t=$(read_temp); t=''${t:-0}
       cur=$(cat "$pct" 2>/dev/null || echo 100)
-      err=$(( target - t ))            # >0: cooler than target   <0: hotter
+      err=$(( target - t ))
 
       if   [ "$err" -gt "$band" ];      then adj=$(( err * k_up   / 1000 ))
       elif [ "$err" -lt $(( -band )) ]; then adj=$(( err * k_down / 1000 ))
       else adj=0
       fi
-
       if [ "$adj" -gt "$step_max" ];      then adj=$step_max; fi
       if [ "$adj" -lt $(( -step_max )) ]; then adj=$(( -step_max )); fi
 
@@ -70,6 +71,35 @@ let
       if [ "$new" -lt "$floor" ]; then new=$floor; fi
       if [ "$new" -gt "$ceil"  ]; then new=$ceil;  fi
       if [ "$new" != "$cur" ]; then echo "$new" > "$pct"; fi
+
+      systemd-notify WATCHDOG=1     # heartbeat: a hung loop misses this -> restart
+      sleep "$tick"
+    done
+  '';
+
+  # --- fan guard: independent thermal breaker, keyed on temperature, not liveness --
+  fanGuard = pkgs.writeShellScript "fan-thermal-guard" ''
+    export PATH=${pkgs.coreutils}/bin:${pkgs.fw-ectool}/bin:${pkgs.systemd}/bin:$PATH
+
+    guard=96000     # trip point in millidegrees (~4 C below the 100 C TjMax)
+    need=3          # consecutive over-temp reads (x tick) before tripping
+    tick=10
+    hot=0
+
+    ${readTemp}
+
+    while true; do
+      t=$(read_temp); t=''${t:-0}
+      if [ "$t" -ge "$guard" ]; then hot=$(( hot + 1 )); else hot=0; fi
+
+      if [ "$hot" -ge "$need" ]; then
+        echo "THERMAL GUARD TRIPPED: package $(( t / 1000 ))C sustained >= $(( guard / 1000 ))C — forcing fan to max and stopping fw-fanctrl" >&2
+        ectool fanduty 100 || true                  # instant max airflow
+        systemctl stop fw-fanctrl.service || true   # stop it re-commanding the fan
+        ectool fanduty 100 || true                  # re-assert max after EC revert
+        hot=0
+        sleep 60                                    # stay tripped; recheck after a minute
+      fi
 
       sleep "$tick"
     done
@@ -89,8 +119,8 @@ let
         *) echo "usage: powermode {quiet|balanced|performance}" >&2; exit 1 ;;
       esac
       mkdir -p /var/lib/powermode
-      echo "$mode" > /var/lib/powermode/mode   # the regulator reads this every tick
-      fw-fanctrl use "$mode"                    # switch the fan curve immediately
+      echo "$mode" > /var/lib/powermode/mode
+      fw-fanctrl use "$mode" > /dev/null
       echo "powermode -> $mode"
     '';
   };
@@ -103,8 +133,6 @@ in
     config = {
       defaultStrategy = "balanced";
       strategies = {
-        # quiet: fan is only a BACKSTOP. The regulator holds the die ~62 C, so the
-        # curve stays off until ~70 C and only then helps out.
         quiet = {
           fanSpeedUpdateFrequency = 5;
           movingAverageInterval = 30;
@@ -114,12 +142,16 @@ in
               speed = 0;
             }
             {
+              temp = 60;
+              speed = 0;
+            }
+            {
               temp = 70;
-              speed = 20;
+              speed = 25;
             }
             {
               temp = 80;
-              speed = 55;
+              speed = 60;
             }
             {
               temp = 90;
@@ -127,7 +159,6 @@ in
             }
           ];
         };
-        # balanced: fan and CPU setpoints sit close; both contribute.
         balanced = {
           fanSpeedUpdateFrequency = 5;
           movingAverageInterval = 25;
@@ -154,8 +185,6 @@ in
             }
           ];
         };
-        # performance: fan LEADS — ramps early and hard so the die never nears the
-        # regulator's 92 C target, leaving the CPU at full speed.
         performance = {
           fanSpeedUpdateFrequency = 2;
           movingAverageInterval = 10;
@@ -182,29 +211,46 @@ in
     };
   };
 
-  # --- CPU: temperature-regulated cap, target chosen by the current mode ----------
+  # --- CPU: temperature-regulated cap, with a systemd watchdog --------------------
   systemd.services.cpu-thermal-regulator = {
     description = "Per-mode temperature-regulated CPU cap (powermode)";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "notify";
+      NotifyAccess = "all"; # allow the systemd-notify child to feed the watchdog
+      WatchdogSec = 15; # no heartbeat for 15 s -> systemd kills + restarts it
+      TimeoutStopSec = 10; # SIGKILL escalation if a wedged process ignores stop
+      Restart = "always";
+      RestartSec = 2;
+      ExecStart = "${regulator}";
+      # fail safe: if the regulator stops for any reason, give the CPU its full range
+      ExecStopPost = "${pkgs.bash}/bin/bash -c 'echo 100 > /sys/devices/system/cpu/intel_pstate/max_perf_pct'";
+    };
+  };
+
+  # --- fan safety guard: trips near TjMax no matter what failed -------------------
+  systemd.services.fan-thermal-guard = {
+    description = "Force max fan if the die approaches TjMax (cooling-failure breaker)";
+    after = [ "fw-fanctrl.service" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "simple";
       Restart = "always";
       RestartSec = 2;
-      ExecStart = "${regulator}";
-      # fail safe: if the regulator dies, hand the CPU back its full range
-      ExecStopPost = "${pkgs.bash}/bin/bash -c 'echo 100 > /sys/devices/system/cpu/intel_pstate/max_perf_pct'";
+      ExecStart = "${fanGuard}";
     };
   };
-
-  # apply the stored mode's fan curve at boot (CPU is handled by the daemon)
+  # re-apply the stored mode's fan strategy whenever fw-fanctrl (re)starts —
+  # at boot, and after a rebuild, where fw-fanctrl comes back on its defaultStrategy
   systemd.services.powermode-boot = {
-    description = "Apply stored powermode at boot";
+    description = "Apply stored powermode fan strategy when fw-fanctrl (re)starts";
     after = [ "fw-fanctrl.service" ];
-    wants = [ "fw-fanctrl.service" ];
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = [ "fw-fanctrl.service" ];
+    partOf = [ "fw-fanctrl.service" ];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${powermode}/bin/powermode"; # no arg -> applies stored mode
+      ExecStartPre = "${pkgs.coreutils}/bin/sleep 2"; # let fw-fanctrl's control socket come up
+      ExecStart = "${powermode}/bin/powermode"; # no arg -> re-applies the stored mode
     };
   };
 
