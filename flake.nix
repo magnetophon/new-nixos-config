@@ -10,7 +10,7 @@
 
     nixpkgs-glide.url = "github:RobertCraigie/nixpkgs/feat/glide-browser";
 
-    claude-sandbox.url = "github:mrquentin/claude-sandbox";
+    # claude-sandbox.url = "github:mrquentin/claude-sandbox";
 
     microvm = {
       url = "github:microvm-nix/microvm.nix";
@@ -44,7 +44,8 @@
           ./modules/common.nix
           ./modules/laptop.nix
           ./modules/non-rt.nix
-          ./modules/claude-sandbox.nix
+          ./modules/powermode.nix
+          # ./modules/claude-sandbox.nix
           nixos-hardware.nixosModules.framework-12th-gen-intel
           musnix.nixosModules.musnix
         ];
@@ -61,7 +62,8 @@
           ./modules/common.nix
           ./modules/laptop.nix
           ./modules/rt.nix
-          ./modules/claude-sandbox.nix
+          ./modules/powermode.nix
+          # ./modules/claude-sandbox.nix
           nixos-hardware.nixosModules.framework-12th-gen-intel
           musnix.nixosModules.musnix
         ];
