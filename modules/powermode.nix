@@ -142,23 +142,27 @@ in
               speed = 0;
             }
             {
-              temp = 59; # one degree under the minimum speed, otherwise it interpollates and the fan stalls
+              temp = 54; # one degree under the minimum speed, otherwise it interpollates and the fan stalls
               speed = 0;
             }
             {
-              temp = 60;
+              temp = 55;
               speed = 10; # 10 seems to be the minimum, lower it stops
             }
             {
-              temp = 70;
-              speed = 25;
+              temp = 57;
+              speed = 30;
             }
             {
-              temp = 80;
+              temp = 64;
+              speed = 34;
+            }
+            {
+              temp = 70;
               speed = 60;
             }
             {
-              temp = 90;
+              temp = 80;
               speed = 100;
             }
           ];
@@ -169,7 +173,11 @@ in
           speedCurve = [
             {
               temp = 0;
-              speed = 10;
+              speed = 10; # 10 seems to be the minimum, lower it stops
+            }
+            {
+              temp = 40;
+              speed = 25;
             }
             {
               temp = 55;
