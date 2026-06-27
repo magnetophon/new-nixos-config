@@ -251,7 +251,6 @@ in
     real_time_config_quick_scan
     (pkgs.fmit.override { jackSupport = true; })
     sooperlooper
-    vimpc
     x32edit
     # m32edit
 
