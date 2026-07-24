@@ -111,7 +111,7 @@
         syntax on
       '';
     })
-    texlive.combined.scheme-medium
+    texliveMedium
     wordnet
     wkhtmltopdf
     haskellPackages.markdown
