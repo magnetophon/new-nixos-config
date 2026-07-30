@@ -247,7 +247,6 @@
     thunderbird
     signal-desktop
     telegram-desktop
-    hexchat
 
     # office / documents
     libreoffice
