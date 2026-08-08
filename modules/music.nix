@@ -186,19 +186,6 @@ in
     magnetophonDSP.pluginUtils
     magnetophonDSP.shelfMultiBand
     tambura
-    faust
-    faust2
-    faust2alqt
-    faust2alsa
-    faust2firefox
-    faust2jack
-    faust2jackrust
-    faust2jaqt
-    faust2lv2
-    faust2sndfile
-    faustlive
-    faustfmt
-    faustlsp
     faust-physicalmodeling
     kapitonov-plugins-pack
     mooSpace

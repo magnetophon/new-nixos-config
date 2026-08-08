@@ -278,6 +278,21 @@
       haskellPackages.ShellCheck
       python3
 
+      faust
+      faust2
+      faust2alqt
+      faust2alsa
+      faust2firefox
+      faust2jack
+      faust2jackrust
+      faust2jaqt
+      faust2lv2
+      faust2sndfile
+      faustlive
+      faustfmt
+      faustlsp
+      faust-benchmark-tools
+
       # spell checking
       aspell
       aspellDicts.en
