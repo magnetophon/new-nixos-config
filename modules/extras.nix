@@ -121,7 +121,7 @@
     # ── info / TUI ────────────────────────────────────────────────
     asciinema
     fastfetch
-    tuir
+    # tuir
     wiki-tui
     navi
     so

@@ -210,7 +210,7 @@
       tig
 
       # file managers
-      yazi-unwrapped
+      yazi
       ranger
       lf
 
