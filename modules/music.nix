@@ -76,7 +76,6 @@ in
     drumgizmo
     drumkv1
     ensemble-chorus
-    eq10q
     fire
 
     open-music-kontrollers.eteroj
@@ -163,7 +162,6 @@ in
     tetraproc
     uhhyou-plugins
     uhhyou-plugins-juce
-    vocproc
     wolf-shaper
     x42-plugins
     xtuner

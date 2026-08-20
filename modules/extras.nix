@@ -65,7 +65,6 @@
     bfs
     broot
     nnn
-    fasd
     grex
     rdfind
     fselect

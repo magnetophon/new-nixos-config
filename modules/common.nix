@@ -281,7 +281,6 @@
       faust
       faust2
       faust2alqt
-      faust2alsa
       faust2firefox
       faust2jack
       faust2jackrust
