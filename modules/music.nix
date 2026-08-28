@@ -188,6 +188,9 @@ in
     kapitonov-plugins-pack
     mooSpace
 
+    # ── Faust dev ──────────────────────────────────────────────────
+    faustlive
+
     # ── Hosts / DAWs ──────────────────────────────────────────────
     ardour
     (lib.lowPrio ardour_8) # keep both majors; let ardour 9 win the shared "ardour"-named files

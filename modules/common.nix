@@ -287,7 +287,7 @@
       faust2jaqt
       faust2lv2
       faust2sndfile
-      faustlive
+      # faustlive not here: it is a GUI
       faustfmt
       faustlsp
       faust-benchmark-tools
