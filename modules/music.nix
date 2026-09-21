@@ -70,7 +70,6 @@ in
     delayarchitect
     dexed
     digidrie
-    diopser
     distrho-ports
     dragonfly-reverb
     drumgizmo
@@ -209,7 +208,6 @@ in
     # ── Utilities ──────────────────────────────────────────────────
     a2jmidid
     cuetools
-    gwc
     jack2
     jack-link
     lilv

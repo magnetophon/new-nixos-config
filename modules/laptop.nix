@@ -191,7 +191,6 @@
     wmfocus
     dmenu
     rofi
-    rofi-pass
     rofimoji
     walker
 
