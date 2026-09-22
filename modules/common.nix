@@ -54,6 +54,7 @@
       "reaper"
       "x32-edit"
       "vst2-sdk" # pulled in by some plugin builds
+      "ttf-bitstream-vera"
     ];
 
   # ── Boot ────────────────────────────────────────────────────────────
