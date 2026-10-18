@@ -193,8 +193,6 @@
     rink
 
     # ── spelling extras ───────────────────────────────────────────
-    aspellDicts.en-computers
-    aspellDicts.en-science
     hunspellDicts.en_US-large
     hunspellDicts.nl_NL
     hunspellDicts.de_DE
