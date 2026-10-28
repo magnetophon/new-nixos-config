@@ -168,6 +168,7 @@ in
     zam-plugins
     zlcompressor
     zlequalizer
+    zlspectrumequalizer
     zlsplitter
     zynaddsubfx
 
