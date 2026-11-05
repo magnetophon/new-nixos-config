@@ -15,7 +15,17 @@
     interfaces.eno1.useDHCP = true;
     interfaces.eno2.useDHCP = true;
     interfaces.eno3.useDHCP = true;
-    interfaces.eno4.useDHCP = true;
+    # interfaces.eno4.useDHCP = true;
+    interfaces.eno4 = {
+      useDHCP = false;
+
+      ipv4.addresses = [
+        {
+          address = "10.0.0.9";
+          prefixLength = 24;
+        }
+      ];
+    };
   };
 
   system.stateVersion = "20.09";

@@ -37,8 +37,8 @@
       INTEL_GPU_BOOST_FREQ_ON_BAT = "300";
       SOUND_POWER_SAVE_ON_AC = "0";
       SOUND_POWER_SAVE_ON_BAT = "1";
-      DEVICES_TO_DISABLE_ON_LAN_CONNECT = "wifi";
-      DEVICES_TO_ENABLE_ON_LAN_DISCONNECT = "wifi";
+      # DEVICES_TO_DISABLE_ON_LAN_CONNECT = "wifi";
+      # DEVICES_TO_ENABLE_ON_LAN_DISCONNECT = "wifi";
     };
   };
   # use modules/powermode.nix instead:
