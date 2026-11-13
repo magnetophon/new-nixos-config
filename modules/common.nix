@@ -38,7 +38,7 @@
       "intel-ocl"
 
       # claude-sandbox (modules/claude-sandbox.nix)
-      "claude-code"
+      # "claude-code"
 
       # steam-run (extras.nix)
       "steam-unwrapped"
@@ -110,15 +110,15 @@
     # Sandbox account for running claude-code. No sudo, no SSH keys.
     # Shared group `bot` (bart is a member) lets bart drop files into
     # /home/bot and read whatever bot writes back.
-    users.bot = {
-      name = "bot";
-      group = "bot";
-      createHome = false;
-      home = "/home/bot";
-      isNormalUser = true;
-      uid = 1002;
-      packages = [ pkgs.claude-code ];
-    };
+    # users.bot = {
+    # name = "bot";
+    # group = "bot";
+    # createHome = false;
+    # home = "/home/bot";
+    # isNormalUser = true;
+    # uid = 1002;
+    # packages = [ pkgs.claude-code ];
+    # };
     mutableUsers = true;
   };
 
@@ -443,14 +443,14 @@
   # Resource ceiling for everything bot runs after login. Applies to the
   # systemd user slice (uid 1002), so it covers shells, claude-code, and any
   # subprocesses they spawn.
-  systemd.slices."user-1002" = {
-    description = "User slice for bot (uid 1002)";
-    sliceConfig = {
-      MemoryMax = "8G";
-      CPUQuota = "200%";
-      TasksMax = 512;
-    };
-  };
+  # systemd.slices."user-1002" = {
+  # description = "User slice for bot (uid 1002)";
+  # sliceConfig = {
+  # MemoryMax = "8G";
+  # CPUQuota = "200%";
+  # TasksMax = 512;
+  # };
+  # };
   hardware = {
     # enableRedistributableFirmware (default true) covers linux-firmware,
     # which has Intel WiFi/GPU blobs and ethernet NIC firmware. Add anything
