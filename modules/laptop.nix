@@ -10,7 +10,6 @@
   imports = [
     ./music.nix
     ./extras.nix
-    ./qutebrowser-emudhra-distrust.nix
   ];
 
   # ── Boot extras for laptop ─────────────────────────────────────────
