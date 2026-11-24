@@ -130,7 +130,7 @@ in
   # --- fan: fw-fanctrl, one curve per mode ----------------------------------------
   hardware.fw-fanctrl = {
     enable = true;
-    config = {
+    settings = {
       defaultStrategy = "balanced";
       strategies = {
         quiet = {
