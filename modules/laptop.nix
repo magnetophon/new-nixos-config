@@ -3,6 +3,7 @@
   lib,
   config,
   nixpkgs-glide,
+  tether,
   ...
 }:
 
@@ -10,6 +11,7 @@
   imports = [
     ./music.nix
     ./extras.nix
+    tether.nixosModules.default
   ];
 
   # ── Boot extras for laptop ─────────────────────────────────────────
@@ -357,6 +359,26 @@
       };
     };
     dconf.enable = true;
+
+    tether = {
+      enable = true;
+
+      wifi = {
+        enable = true;
+        openFirewall = true;
+      };
+
+      bluetooth = {
+        enable = true;
+        adapters = [ "hci0" ];
+      };
+
+      # extensions = [
+      # "firefox"
+      # "chromium"
+      # "thunderbird"
+      # ];
+    };
   };
 
   xdg.sounds.enable = false;
